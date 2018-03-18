@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.feizi.wx.dao.AreaDao">
+    
+    <resultMap id="area" type="com.feizi.wx.entity.Area">
+        <result property="areaId" column="area_id"/>
+        <result property="areaName" column="area_name"/>
+        <result property="priority" column="priority"/>
+        <result property="createTime" column="create_time"/>
+        <result property="lastEditTime" column="last_edit_time"/>
+    </resultMap>
+
+    <!-- 查询区域列表 -->
+    <select id="queryAreaList" resultMap="area">
+        SELECT
+            area_id,
+            area_name,
+            priority,
+            create_time,
+            last_edit_time
+        FROM
+            tb_area
+        ORDER BY priority DESC
+    </select>
+
+    <!-- 根据区域ID查询区域信息 -->
+    <select id="queryAreaById" resultType="com.feizi.wx.entity.Area">
+        SELECT
+            area_id,
+            area_name,
+            priority,
+            create_time,
+            last_edit_time
+        FROM
+            tb_area
+        WHERE area_id = #{areaId}
+    </select>
+
+    <!-- 新增区域信息 -->
+    <insert id="insertArea" useGeneratedKeys="true" keyProperty="areaId"
+            keyColumn="area_id" parameterType="com.feizi.wx.entity.Area">
+        INSERT INTO tb_area (area_name, priority, create_time, last_edit_time) VALUES (#{areaName}, #{priority}, #{createTime}, #{lastEditTime})
+    </insert>
+
+    <!-- 修改区域信息 -->
+    <update id="updateArea" parameterType="com.feizi.wx.entity.Area">
+        UPDATE tb_area
+        <set>
+            <if test="areaName != null">
+                area_name = #{areaName},
+            </if>
+            <if test="priority != null">
+                priority = #{priority},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="lastEditTime != null">
+                last_edit_time = #{lastEditTime},
+            </if>
+        </set>
+        WHERE area_id = #{areaId}
+    </update>
+
+    <!-- 根据区域ID删除区域信息 -->
+    <delete id="deleteArea" parameterType="java.lang.Integer">
+        DELETE FROM tb_area WHERE area_id = #{areaId}
+    </delete>
+</mapper>
